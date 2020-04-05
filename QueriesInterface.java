@@ -15,8 +15,9 @@ public interface QueriesInterface extends Remote{
 	   void deleteEdge(int firstID,int secondID) throws RemoteException;
 	   int shortestPath(int firstID,int secondID) throws RemoteException;
 	   String getGraph() throws RemoteException;
+	   void constructGraph() throws RemoteException;
 	   String executeBatch(String batch) throws RemoteException;//the batch is  like A 2 3\nD 4 1\nF
 	   void init (ArrayList<Point> data) throws RemoteException;
 	   long report(String batch) throws RemoteException;
-
+		ArrayList<Integer> doBFSShortestPath(int source, int dest) throws RemoteException;
 }
