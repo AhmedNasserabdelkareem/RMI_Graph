@@ -67,8 +67,8 @@ public class RMIClient {
 									"inputGraph.txt"));
 							String line = reader.readLine();
 							while (line != null && line != "S") {
-								String[] nums = line.split(" ")
-								comp.addEdge(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]))
+								String[] nums = line.split(" ");
+								comp.addEdge(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]));
 								line = reader.readLine();
 							}
 							reader.close();
