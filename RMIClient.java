@@ -1,10 +1,13 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class RMIClient {
@@ -30,16 +33,32 @@ public class RMIClient {
 		}
 	   	batch +="F";
 	   	System.out.println(batch);
-		   try {
-			   FileWriter myWriter = new FileWriter(fileName);
-			   myWriter.write(batch);
-			   myWriter.close();
-		   } catch (IOException e) {
-			   System.out.println("An error occurred.");
-			   e.printStackTrace();
-		   }
+	   	//writeFile(batch,fileName);
 		   return batch;
 
+	   }
+	   public static ArrayList<Point> readGraph(String fileName) {
+			BufferedReader reader;
+			ArrayList<Point> graph = new ArrayList<Point>();
+			try {
+
+				reader = new BufferedReader(new FileReader(
+						fileName));
+				String line = reader.readLine();
+				while (line != null && !line.equals("S")) {
+					String[] nums = line.split(" ");
+					graph.add(new Point(Integer.parseInt(nums[0]),Integer.parseInt(nums[1])));
+					line = reader.readLine();
+				}
+			
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+				return graph;
+	   
 	   }
 	   public static void main(String[] args) {
            System.setProperty("java.security.policy","client.policy");
@@ -108,31 +127,38 @@ while(flag) {
 						node2 = in.nextInt();
 						response = Integer.toString(comp.shortestPath(node1,node2));
 						break;
-
 						// new function from zoz
 						case 4://get the graph
 						System.out.println(comp.getGraph());
 							break;
 
 						case 5://add Initial graph (reading input file)
-							BufferedReader reader;
-							try {
+							comp.init(readGraph("inputGraph.txt"));
 
-								reader = new BufferedReader(new FileReader(
-										"inputGraph.txt"));
-								String line = reader.readLine();
-								while (line != null && !line.equals("S")) {
-									String[] nums = line.split(" ");
-									comp.addEdge(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]));
-									line = reader.readLine();
-								}
-								reader.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (Exception e){
-								e.printStackTrace();
+							break;
+						case 6: // report mode
+							String total = "";
+							for (int i=1;i<10;i++) { // percentage
+								comp.init(readGraph("inputGraph.txt"));
+								long res = comp.report(generateBatch("",(float) (0.1*i), 5, 20));
+								total += (String.valueOf(i)+" "+String.valueOf(res)+"\n");
 							}
-
+							writeFile(total,"percent.txt");
+							total = "";
+							for (int j=1;j<20;j++) {//batch size
+								comp.init(readGraph("inputGraph.txt"));
+								long res = comp.report(generateBatch("",(float) 0.3, 5, j));
+								total += (String.valueOf(j)+" "+String.valueOf(res)+"\n");
+							}
+							writeFile(total,"batchsize.txt");
+							total = "";
+							for (int k=2;k<15;k++) {//num of nodes
+								String batch1 = generateBatch("",(float) 0.3, k, 10);
+								comp.init(readGraph("src/graphs/graph"+String.valueOf(k)+".txt"));
+								long res = comp.report(batch1);
+								total += (String.valueOf(k)+" "+String.valueOf(res)+"\n");
+							}
+							writeFile(total,"numofnodes.txt");
 							break;
 						default://close the program
 							flag = false;
@@ -153,5 +179,16 @@ while(flag) {
 	        }
 
 	   }
+	private static void writeFile(String data,String fileName) {
+		// TODO Auto-generated method stub
+		   try {
+			   FileWriter myWriter = new FileWriter(fileName);
+			   myWriter.write(data);
+			   myWriter.close();
+		   } catch (IOException e) {
+			   System.out.println("An error occurred.");
+			   e.printStackTrace();
+		   }
+	}
 
 }

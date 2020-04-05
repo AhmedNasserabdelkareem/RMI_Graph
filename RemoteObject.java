@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.rmi.RemoteException;
 import java.util.*;
 /**
@@ -35,8 +36,9 @@ public class RemoteObject implements QueriesInterface {
 				while (graph.size() < node2)
 				{	graph.add(new LinkedList<Integer>()); }
 
-
-		graph.get(node1-1).add(node2);
+				if (node1 != node2) {
+					graph.get(node1-1).add(node2);					
+				}
 	}
 
 	@Override
@@ -113,6 +115,29 @@ public class RemoteObject implements QueriesInterface {
         }
         return ret;
     }
+	@Override
+	public void init(ArrayList<Point> data) throws RemoteException {
+		// TODO Auto-generated method stub
+		maxNodes=2;
+		  graph = new ArrayList<LinkedList<Integer>>();
+			for(int i=1;i<=maxNodes;i++)
+					graph.add(new LinkedList<Integer>());
+	
+		for (int i=0;i<data.size();i++) {
+			Point tmp = data.get(i);
+			this.addEdge(tmp.x,tmp.y);
+		}
+				
+	}
+	@Override
+	public long report(String batch) throws RemoteException {
+		// TODO Auto-generated method stub
+		long startTime = System.nanoTime();
+		this.executeBatch(batch);
+		long endTime   = System.nanoTime();
+		long totalTime = endTime - startTime;
+		return totalTime;
+	}
 
 
 
