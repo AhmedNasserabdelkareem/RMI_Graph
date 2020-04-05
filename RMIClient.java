@@ -73,11 +73,13 @@ while(flag) {
 						float c = in.nextFloat();
 						System.out.println("\nenter the batch size , \n");
 						int bs = in.nextInt();
-						System.out.println("\nenter the number of nodes , \n");
-						int nn = in.nextInt();
-						String batch = generateBatch("batch.txt", c, nn,bs);
+						String batch = generateBatch("batch.txt", c, nodes,bs);
 						System.out.println("Response :");
-						System.out.println(comp.executeBatch(batch));
+						try {
+							System.out.println(comp.executeBatch(batch));
+						}catch (Exception e){
+							e.printStackTrace();
+						}
 
 						break;
 					case 1:// adding edge to the graph  between two nodes

@@ -70,14 +70,13 @@ public class RemoteObject implements QueriesInterface {
 
 	}
     @Override
-    public String executeBatch(String s){
+    public String executeBatch(String s)throws RemoteException{
 	    String res = "";
 	    String []q = s.split("\n");
 	    for (int i =0 ; i<q.length ;i++){
 	        if(q[i].equals("F")){
 	            break;
             }
-	        try {
                 String[] cs = q[i].split(" ");
                 if (cs[0].equals("A")) {
                     this.addEdge(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
@@ -87,9 +86,7 @@ public class RemoteObject implements QueriesInterface {
                     res += this.shortestPath(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
                     res += "\n";
                 }
-            }catch (Exception e){
-	            e.printStackTrace();
-            }
+
         }
 	    return res;
     }

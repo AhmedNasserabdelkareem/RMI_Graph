@@ -14,6 +14,6 @@ public interface QueriesInterface extends Remote{
 	   void deleteEdge(int firstID,int secondID) throws RemoteException;
 	   int shortestPath(int firstID,int secondID) throws RemoteException;
 	   String getGraph() throws RemoteException;
-	   String executeBatch(String batch);//the batch is  like A 2 3\nD 4 1\nF
+	   String executeBatch(String batch) throws RemoteException;//the batch is  like A 2 3\nD 4 1\nF
 
 }
