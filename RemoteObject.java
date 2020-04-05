@@ -1,5 +1,12 @@
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
+
 /**
  * @author Ziyad ELbanna
  */
@@ -7,6 +14,7 @@ public class RemoteObject implements QueriesInterface {
 
 	static int maxNodes;
 	private ArrayList<LinkedList<Integer>> graph;
+	private Graph graph2 = null;
 
 // constructor
 // this is the implementation of a graph
@@ -98,6 +106,18 @@ public class RemoteObject implements QueriesInterface {
 	    return res;
     }
 
+	public void constructGraph()
+	{
+		graph2 = new Graph(graph.size());
+		for (int i =0; i < graph.size(); i++)
+			{
+				for(int u=0; u< graph.get(i).size(); u++)
+						{
+							graph2.addEdge(i, u);
+						}
+			}
+	}
+
 	public String getGraph(){
         String ret = "";
         for(int i=1 ;i<= graph.size();i++){
@@ -111,8 +131,64 @@ public class RemoteObject implements QueriesInterface {
                 ret += i + " --> " + arr + "\n";
             }
         }
+			constructGraph();
+
         return ret;
     }
+
+
+
+	public ArrayList<Integer> doBFSShortestPath(int source, int dest)
+	{
+		ArrayList<Integer> shortestPathList = new ArrayList<Integer>();
+		HashMap<Integer, Boolean> visited = new HashMap<Integer, Boolean>();
+
+		if (source == dest)
+			return null;
+		Queue<Integer> queue = new LinkedList<Integer>();
+		Stack<Integer> pathStack = new Stack<Integer>();
+
+		queue.add(source);
+		pathStack.add(source);
+		visited.put(source, true);
+
+		while(!queue.isEmpty())
+		{
+			int u = queue.poll();
+			ArrayList<Integer> adjList = graph2.getOutEdges(u);
+
+			for(int v : adjList)
+			{
+				if(!visited.containsKey(v))
+				{
+					queue.add(v);
+					visited.put(v, true);
+					pathStack.add(v);
+					if(u == dest)
+						break;
+				}
+			}
+		}
+
+
+		//To find the path
+		int node, currentSrc=dest;
+		shortestPathList.add(dest);
+		while(!pathStack.isEmpty())
+		{
+			node = pathStack.pop();
+			if(graph2.isNeighbor(currentSrc, node))
+			{
+				shortestPathList.add(node);
+				currentSrc = node;
+				if(node == source)
+					break;
+			}
+		}
+
+		return shortestPathList;
+	}
+
 
 
 

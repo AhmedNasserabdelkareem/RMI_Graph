@@ -61,7 +61,7 @@ public class RMIClient {
 while(flag) {
 		            String response = "";
 		            int node1=0;int node2=0;
-	            	System.out.println("\n0-to use auto generated batch \n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-to calculate shortest path between two nodes enter \n4- to get graph press\n5- To add initial graph from file\nPress CTRL+C to close");
+	            	System.out.println("\n0-to use auto generated batch \n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-Shortest path (Dijkstra) \n4- Shortest path (BFS)\n5- To add initial graph from file\nPress CTRL+C to close");
 	            	int choice = in.nextInt();
 
 
@@ -109,9 +109,12 @@ while(flag) {
 						response = Integer.toString(comp.shortestPath(node1,node2));
 						break;
 
-						// new function from zoz
-						case 4://get the graph
-						System.out.println(comp.getGraph());
+						case 4://calculate the shortest path between two nodes
+							System.out.println("\nEnter the id of the first node:\n");
+							node1 = in.nextInt();
+							System.out.println("\nEnter the id of the second node:\n");
+							node2 = in.nextInt();
+							response = Integer.toString(comp.doBFSShortestPath(node1,node2).size());
 							break;
 
 						case 5://add Initial graph (reading input file)
