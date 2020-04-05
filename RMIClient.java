@@ -28,7 +28,7 @@ public class RMIClient {
 while(flag) {
 		            String response = "";
 		            int node1=0;int node2=0;
-	            	System.out.println("\n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-to calculate shortest path between two nodes enter \n4- to get graph press\n5- To add initial graph from file\nPress CTRL+C to close");
+System.out.println("\n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-to calculate shortest path between two nodes enter \n4- to get graph press\n5- To add initial graph from file\nPress CTRL+C to close");
 	            	int choice = in.nextInt();
 
 	  	switch (choice) {
