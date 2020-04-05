@@ -1,5 +1,5 @@
 import java.rmi.RemoteException;
-
+import java.util.*;
 /**
  * @author Ziyad ELbanna
  *
@@ -10,15 +10,22 @@ public class RemoteObject implements QueriesInterface {
 	private ArrayList<LinkedList<Integer>> graph;
 
 // constructor
-
+// this is the implementation of a graph
 	RemoteObject(int max){
 	        maxNodes = max;
 	        graph = new ArrayList<LinkedList<Integer>>();
-	        for(int i=0;i<=maxNodes;i++)
+	        for(int i=0;i<maxNodes;i++)
 	            graph.add(new LinkedList<Integer>());
 	    }
+			RemoteObject(){
+				maxNodes=2;
+			  graph = new ArrayList<LinkedList<Integer>>();
+				for(int i=0;i<maxNodes;i++)
+						graph.add(new LinkedList<Integer>());
+			    }
 
 
+/// I replaced ID with node#
 	@Override
 	public void addEdge(int node1, int node2) throws RemoteException {
 		graph.get(node1).add(node2);
@@ -30,9 +37,9 @@ public class RemoteObject implements QueriesInterface {
 		graph.get(node1).remove(node2);
 		graph.get(node2).remove(node1);
 	}
-
+// used dijkstra's algorithm online to return the cost of shortest path, nasser the required is 'int=' not 'string'
 	@Override
-	public String shortestPath(int node1, int node2) throws RemoteException {
+	public int shortestPath(int node1, int node2) throws RemoteException {
 
 		int ret = -1;
         Integer s;
