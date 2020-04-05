@@ -137,8 +137,8 @@ while(flag) {
 							break;
 					}
 
-		            System.out.print("\033[H\033[2J");
-		            System.out.flush();
+		            //System.out.print("\033[H\033[2J");
+		           // System.out.flush();
 		            System.out.println( "The return value from the server is: " + response );
 								System.out.println("Graph:" +comp.getGraph() );
 
