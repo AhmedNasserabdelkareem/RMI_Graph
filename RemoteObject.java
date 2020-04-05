@@ -28,7 +28,7 @@ public class RemoteObject implements QueriesInterface {
 	public void addEdge(int node1, int node2) throws RemoteException {
 
 		// if node is not here: create new node and add a new LinkedList
-
+		System.out.println(node1+" "+node2);
 				while (graph.size() < node1)
 					graph.add(new LinkedList<Integer>());
 
@@ -51,7 +51,7 @@ public class RemoteObject implements QueriesInterface {
 		int ret = -1;
         Integer s;
         boolean flag = true;
-        int visited[] = new int[maxNodes];
+        int visited[] = new int[graph.size()];
         LinkedList<Integer> queue = new LinkedList<Integer>();
 				//base condition
         if(node1 == node2)  return 0;
@@ -100,7 +100,7 @@ public class RemoteObject implements QueriesInterface {
 
 	public String getGraph(){
         String ret = "";
-        for(int i=1 ;i<= maxNodes;i++){
+        for(int i=1 ;i<= graph.size();i++){
 					// when the graph is not  empty
             if(!graph.get(i-1).isEmpty()){
                 String arr = "[ ";
