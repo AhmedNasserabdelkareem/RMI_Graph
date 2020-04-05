@@ -90,6 +90,7 @@ public class RemoteObject implements QueriesInterface {
         }
 	    return res;
     }
+
 	public String getGraph(){
         String ret = "";
         for(int i=0 ;i< maxNodes;i++){
