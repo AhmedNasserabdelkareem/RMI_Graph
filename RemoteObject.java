@@ -2,7 +2,6 @@ import java.rmi.RemoteException;
 import java.util.*;
 /**
  * @author Ziyad ELbanna
- *
  */
 public class RemoteObject implements QueriesInterface {
 
@@ -37,6 +36,7 @@ public class RemoteObject implements QueriesInterface {
 		graph.get(node1).remove(node2);
 		graph.get(node2).remove(node1);
 	}
+
 // used dijkstra's algorithm online to return the cost of shortest path, nasser the required is 'int=' not 'string'
 	@Override
 	public int shortestPath(int node1, int node2) throws RemoteException {
@@ -69,10 +69,34 @@ public class RemoteObject implements QueriesInterface {
         return ret;
 
 	}
-
+    @Override
+    public String executeBatch(String s){
+	    String res = "";
+	    String []q = s.split("\n");
+	    for (int i =0 ; i<q.length ;i++){
+	        if(q[i].equals("F")){
+	            break;
+            }
+	        try {
+                String[] cs = q[i].split(" ");
+                if (cs[0].equals("A")) {
+                    this.addEdge(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                } else if (cs[0].equals("D")) {
+                    this.deleteEdge(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                } else {
+                    res += this.shortestPath(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                    res += "\n";
+                }
+            }catch (Exception e){
+	            e.printStackTrace();
+            }
+        }
+	    return res;
+    }
 	public String getGraph(){
         String ret = "";
-        for(int i=1;i<=maxNodes;i++){
+        for(int i=0 ;i< maxNodes;i++){
+					// when the graph is not  empty
             if(!graph.get(i).isEmpty()){
                 String arr = "[ ";
                 Iterator<Integer> t = graph.get(i).listIterator();
