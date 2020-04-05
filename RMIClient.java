@@ -1,6 +1,10 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 public class RMIClient {
 	   public static void main(String[] args) {
@@ -57,6 +61,22 @@ public class RMIClient {
 
 					case 5://add Initial graph (reading input file)
 						//TODO implement reading from file
+						BufferedReader reader;
+						try {
+							reader = new BufferedReader(new FileReader(
+									"inputGraph.txt"));
+							String line = reader.readLine();
+							while (line != null && line != "S") {
+								String[] nums = line.split(" ")
+								comp.addEdge(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]))
+								line = reader.readLine();
+							}
+							reader.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (Exception e){
+							e.printStackTrace();
+						}
 						break;
 					default://close the program
 						flag = false;
