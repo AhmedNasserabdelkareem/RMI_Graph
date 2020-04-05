@@ -41,7 +41,7 @@ public class RemoteObject implements QueriesInterface {
 
 	@Override
 	public void deleteEdge(int node1, int node2) throws RemoteException {
-		graph.get(node1-1).remove();
+		graph.get(node1-1).remove(graph.get(node1-1).indexOf(node2));
 	}
 
 // used dijkstra's algorithm online to return the cost of shortest path, nasser the required is 'int=' not 'string'
