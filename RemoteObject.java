@@ -28,12 +28,12 @@ public class RemoteObject implements QueriesInterface {
 	public void addEdge(int node1, int node2) throws RemoteException {
 
 		// if node is not here: create new node and add a new LinkedList
-		System.out.println(node1+" "+node2);
+
 				while (graph.size() < node1)
-					graph.add(new LinkedList<Integer>());
+					{graph.add(new LinkedList<Integer>());}
 
 				while (graph.size() < node2)
-					graph.add(new LinkedList<Integer>());
+				{	graph.add(new LinkedList<Integer>()); }
 
 
 		graph.get(node1-1).add(node2);
@@ -59,16 +59,16 @@ public class RemoteObject implements QueriesInterface {
         queue.add(node1);
         while (queue.size() != 0 && flag){
             s = queue.poll();
-            Iterator<Integer> i = graph.get(s).listIterator();
+            Iterator<Integer> i = graph.get(s-1).listIterator();
             while (i.hasNext()){
                 int n = i.next();
                 if(n == node2){
-                    ret = visited[s] + 1;
+                    ret = visited[s-1] + 1;
                     flag = false;
                     break;
                 }
-                if (visited[n] == 0){
-                    visited[n] = visited[s] + 1;
+                if (visited[n-1] == 0){
+                    visited[n-1] = visited[s-1] + 1;
                     queue.add(n);
                 }
             }
