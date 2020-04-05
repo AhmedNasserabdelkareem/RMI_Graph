@@ -13,28 +13,35 @@ public class RemoteObject implements QueriesInterface {
 	RemoteObject(int max){
 	        maxNodes = max;
 	        graph = new ArrayList<LinkedList<Integer>>();
-	        for(int i=0;i<maxNodes;i++)
+	        for(int i=1;i<=maxNodes;i++)
 	            graph.add(new LinkedList<Integer>());
 	    }
 			RemoteObject(){
 				maxNodes=2;
 			  graph = new ArrayList<LinkedList<Integer>>();
-				for(int i=0;i<maxNodes;i++)
+				for(int i=1;i<=maxNodes;i++)
 						graph.add(new LinkedList<Integer>());
 			    }
-
 
 /// I replaced ID with node#
 	@Override
 	public void addEdge(int node1, int node2) throws RemoteException {
-		graph.get(node1).add(node2);
-		graph.get(node2).add(node1);
+
+		// if node is not here: create new node and add a new LinkedList
+
+				while (graph.size() < node1)
+					graph.add(new LinkedList<Integer>());
+
+				while (graph.size() < node2)
+					graph.add(new LinkedList<Integer>());
+
+
+		graph.get(node1-1).add(node2);
 	}
 
 	@Override
 	public void deleteEdge(int node1, int node2) throws RemoteException {
-		graph.get(node1).remove(node2);
-		graph.get(node2).remove(node1);
+		graph.get(node1-1).remove();
 	}
 
 // used dijkstra's algorithm online to return the cost of shortest path, nasser the required is 'int=' not 'string'
@@ -69,17 +76,35 @@ public class RemoteObject implements QueriesInterface {
         return ret;
 
 	}
+    @Override
+    public String executeBatch(String s)throws RemoteException{
+	    String res = "";
+	    String []q = s.split("\n");
+	    for (int i =0 ; i<q.length ;i++){
+	        if(q[i].equals("F")){
+	            break;
+            }
+                String[] cs = q[i].split(" ");
+                if (cs[0].equals("A")) {
+                    this.addEdge(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                } else if (cs[0].equals("D")) {
+                    this.deleteEdge(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                } else {
+                    res += this.shortestPath(Integer.parseInt(cs[1]), Integer.parseInt(cs[2]));
+                    res += "\n";
+                }
 
-
-
+        }
+	    return res;
+    }
 
 	public String getGraph(){
         String ret = "";
-        for(int i=0 ;i< maxNodes;i++){
+        for(int i=1 ;i<= maxNodes;i++){
 					// when the graph is not  empty
-            if(!graph.get(i).isEmpty()){
+            if(!graph.get(i-1).isEmpty()){
                 String arr = "[ ";
-                Iterator<Integer> t = graph.get(i).listIterator();
+                Iterator<Integer> t = graph.get(i-1).listIterator();
                 while (t.hasNext())
                     arr += Integer.toString(t.next());
                 arr += " ]";
@@ -88,6 +113,7 @@ public class RemoteObject implements QueriesInterface {
         }
         return ret;
     }
+
 
 
 

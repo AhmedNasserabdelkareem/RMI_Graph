@@ -3,10 +3,44 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.Random;
 
 public class RMIClient {
+	   public static String generateBatch(String fileName, float writingPercentage,int numberOfNodes , int batchSize){
+	   	String batch ="";
+	   	Random random =new Random();
+	   	int writingPercentageInt = (int)(writingPercentage *100);
+	   	for (int i =0 ; i < batchSize;i++) {
+			int nodeA = random.nextInt(numberOfNodes + 1)+1;
+			int nodeB = random.nextInt(numberOfNodes + 1)+1;
+			int rand = random.nextInt(100);
+			String line = Integer.toString(nodeA) + " " + Integer.toString(nodeB);
+			if (rand < writingPercentageInt) {
+				if (random.nextInt(2) == 1) {
+					line = "A " + line;
+				} else {
+					line = "D " + line;
+				}
+			} else {
+				line = "Q " + line;
+			}
+			batch += line + "\n";
+		}
+	   	batch +="F";
+	   	System.out.println(batch);
+		   try {
+			   FileWriter myWriter = new FileWriter(fileName);
+			   myWriter.write(batch);
+			   myWriter.close();
+		   } catch (IOException e) {
+			   System.out.println("An error occurred.");
+			   e.printStackTrace();
+		   }
+		   return batch;
+
+	   }
 	   public static void main(String[] args) {
            System.setProperty("java.security.policy","client.policy");
            Scanner in = new Scanner(System.in);
@@ -21,19 +55,34 @@ public class RMIClient {
 	            QueriesInterface comp = (QueriesInterface) registry.lookup(name);
 	            boolean flag = true;
             	System.out.println("Welcome");
-							System.out.println("Please enter number of nodes in the graph");
-							int nodes = in.nextInt();
+
 
 
 while(flag) {
 		            String response = "";
 		            int node1=0;int node2=0;
-System.out.println("\n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-to calculate shortest path between two nodes enter \n4- to get graph press\n5- To add initial graph from file\nPress CTRL+C to close");
+	            	System.out.println("\n0-to use auto generated batch \n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-to calculate shortest path between two nodes enter \n4- to get graph press\n5- To add initial graph from file\nPress CTRL+C to close");
 	            	int choice = in.nextInt();
+
 
 	  	switch (choice) {
 
+					case 0:// adding edge to the graph  between two nodes
+						System.out.println("\nenter the percentage of writing lines, 0.3 for 30% for example , \n");
+						float c = in.nextFloat();
+						System.out.println("\nenter the batch size , \n");
+						int bs = in.nextInt();
+						System.out.println("\nenter this batch upperbound , \n");
+						int max = in.nextInt();
+						String batch = generateBatch("batch.txt", c, max,bs);
+						System.out.println("Response :");
+						try {
+							System.out.println(comp.executeBatch(batch));
+						}catch (Exception e){
+							e.printStackTrace();
+						}
 
+						break;
 					case 1:// adding edge to the graph  between two nodes
 						System.out.println("\nEnter the id of the first node:\n");
 						node1 = in.nextInt();
@@ -68,10 +117,11 @@ System.out.println("\n1- to add edge between two nodes enter\n2-to delete edge b
 						case 5://add Initial graph (reading input file)
 							BufferedReader reader;
 							try {
+
 								reader = new BufferedReader(new FileReader(
 										"inputGraph.txt"));
 								String line = reader.readLine();
-								while (line != null && line != "S") {
+								while (line != null && !line.equals("S")) {
 									String[] nums = line.split(" ");
 									comp.addEdge(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]));
 									line = reader.readLine();
@@ -89,8 +139,8 @@ System.out.println("\n1- to add edge between two nodes enter\n2-to delete edge b
 							break;
 					}
 
-		            System.out.print("\033[H\033[2J");
-		            System.out.flush();
+		            //System.out.print("\033[H\033[2J");
+		           // System.out.flush();
 		            System.out.println( "The return value from the server is: " + response );
 								System.out.println("Graph:" +comp.getGraph() );
 
