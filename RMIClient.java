@@ -3,11 +3,44 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.Random;
 
 public class RMIClient {
+	   public static void updateBatch(String fileName, float writingPercentage,int numberOfNodes , int batchSize){
+	   	String batch ="";
+	   	Random random =new Random();
+	   	int writingPercentageInt = (int)(writingPercentage *100);
+	   	for (int i =0 ; i < batchSize;i++) {
+			int nodeA = random.nextInt(numberOfNodes + 1)+1;
+			int nodeB = random.nextInt(numberOfNodes + 1)+1;
+			int rand = random.nextInt(100);
+			String line = Integer.toString(nodeA) + " " + Integer.toString(nodeB);
+			if (rand < writingPercentageInt) {
+				if (random.nextInt(2) == 1) {
+					line = "A " + line;
+				} else {
+					line = "D " + line;
+				}
+			} else {
+				line = "Q " + line;
+			}
+			batch += line + "\n";
+		}
+	   	System.out.println(batch);
+		   try {
+			   FileWriter myWriter = new FileWriter(fileName);
+			   myWriter.write(batch);
+			   myWriter.close();
+		   } catch (IOException e) {
+			   System.out.println("An error occurred.");
+			   e.printStackTrace();
+		   }
+
+	   }
 	   public static void main(String[] args) {
+		   updateBatch("batch.txt", (float) 0.3, 5,200);
            System.setProperty("java.security.policy","client.policy");
            Scanner in = new Scanner(System.in);
 		   if (System.getSecurityManager() == null) {
