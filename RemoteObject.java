@@ -2,7 +2,6 @@ import java.rmi.RemoteException;
 import java.util.*;
 /**
  * @author Ziyad ELbanna
- *
  */
 public class RemoteObject implements QueriesInterface {
 
@@ -37,6 +36,7 @@ public class RemoteObject implements QueriesInterface {
 		graph.get(node1).remove(node2);
 		graph.get(node2).remove(node1);
 	}
+
 // used dijkstra's algorithm online to return the cost of shortest path, nasser the required is 'int=' not 'string'
 	@Override
 	public int shortestPath(int node1, int node2) throws RemoteException {
@@ -72,7 +72,8 @@ public class RemoteObject implements QueriesInterface {
 
 	public String getGraph(){
         String ret = "";
-        for(int i=1;i<=maxNodes;i++){
+        for(int i=0 ;i< maxNodes;i++){
+					// when the graph is not  empty
             if(!graph.get(i).isEmpty()){
                 String arr = "[ ";
                 Iterator<Integer> t = graph.get(i).listIterator();

@@ -4,7 +4,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 public class RMIServer extends RemoteObject{
-	   public static void main(String args[]) { 
+	   public static void main(String args[]) {
 	        RemoteObject implementation = new RemoteObject();
 
 	        try {
@@ -17,6 +17,6 @@ public class RMIServer extends RemoteObject{
 	            return;
 	        }
 	        System.out.println( "Server is running" );
-	   } 
+	   }
 
 }
