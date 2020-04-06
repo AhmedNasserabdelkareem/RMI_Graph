@@ -13,6 +13,7 @@ Command>> java -jar Server.jar
 Command>> java RMIClient
 
 #Notes
-results directory > has 3 directories for each algorithms
-each algorithm has 3 files for responses time
-graphs directory > I implement graph generator to generate 15 file one foreach graph of size #
+-results directory > has 3 directories for each algorithms
+each algorithm has 3 files for responses time.
+
+-graphs directory > I implement graph generator to generate 15 file one foreach graph of size #
