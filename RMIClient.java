@@ -16,8 +16,8 @@ public class RMIClient {
 	   	Random random =new Random();
 	   	int writingPercentageInt = (int)(writingPercentage *100);
 	   	for (int i =0 ; i < batchSize;i++) {
-			int nodeA = random.nextInt(numberOfNodes + 1)+1;
-			int nodeB = random.nextInt(numberOfNodes + 1)+1;
+			int nodeA = random.nextInt(numberOfNodes)+1;
+			int nodeB = random.nextInt(numberOfNodes)+1;
 			int rand = random.nextInt(100);
 			String line = Integer.toString(nodeA) + " " + Integer.toString(nodeB);
 			if (rand < writingPercentageInt) {
@@ -80,7 +80,7 @@ public class RMIClient {
 while(flag) {
 		            String response = "";
 		            int node1=0;int node2=0;
-	            	System.out.println("\n0-to use auto generated batch \n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-Shortest path (Dijkstra) \n4- Shortest path (BFS)\n5- To add initial graph from file\nPress CTRL+C to close");
+	            	System.out.println("\n0-to use auto generated batch \n1- to add edge between two nodes enter\n2-to delete edge between two nodes enter \n3-Shortest path (Dijkstra) \n4- Shortest path (BFS)\n5- Shortest path (BellmanFord)\n6- To add initial graph from file\nPress CTRL+C to close");
 	            	int choice = in.nextInt();
 
 
@@ -125,48 +125,61 @@ while(flag) {
 						node1 = in.nextInt();
 						System.out.println("\nEnter the id of the second node:\n");
 						node2 = in.nextInt();
-						response = Integer.toString(comp.shortestPath(node1,node2));
+						response = Integer.toString(comp.shortestPath(node1,node2,1));
 						break;
 						// new function from zoz
-						case 4://calculate the shortest path between two nodes
-							System.out.println("\nEnter the id of the first node:\n");
-							node1 = in.nextInt();
-							System.out.println("\nEnter the id of the second node:\n");
-							node2 = in.nextInt();
-							response = Integer.toString(comp.doBFSShortestPath(node1,node2).size());
-							break;
+					case 4://calculate the shortest path between two nodes
+						System.out.println("\nEnter the id of the first node:\n");
+						node1 = in.nextInt();
+						System.out.println("\nEnter the id of the second node:\n");
+						node2 = in.nextInt();
+						response = Integer.toString(comp.shortestPath(node1,node2,3));
+						break;
+					case 5://calculate the shortest path between two nodes
+						System.out.println("\nEnter the id of the first node:\n");
+						node1 = in.nextInt();
+						System.out.println("\nEnter the id of the second node:\n");
+						node2 = in.nextInt();
+						response = Integer.toString(comp.shortestPath(node1,node2,2));
+						break;
 
-						case 5://add Initial graph (reading input file)
+					case 6://add Initial graph (reading input file)
+						comp.init(readGraph("inputGraph.txt"));
+
+						break;
+					case 7: // report mode
+						String total = "";
+						System.out.println("Percentage");
+						for (int i=1;i<10;i++) { // percentage
+							System.out.print(i+" ");
 							comp.init(readGraph("inputGraph.txt"));
-
-							break;
-						case 6: // report mode
-							String total = "";
-							for (int i=1;i<10;i++) { // percentage
-								comp.init(readGraph("inputGraph.txt"));
-								long res = comp.report(generateBatch("",(float) (0.1*i), 5, 20));
-								total += (String.valueOf(i)+" "+String.valueOf(res)+"\n");
-							}
-							writeFile(total,"percent.txt");
-							total = "";
-							for (int j=1;j<20;j++) {//batch size
-								comp.init(readGraph("inputGraph.txt"));
-								long res = comp.report(generateBatch("",(float) 0.3, 5, j));
-								total += (String.valueOf(j)+" "+String.valueOf(res)+"\n");
-							}
-							writeFile(total,"batchsize.txt");
-							total = "";
-							for (int k=2;k<15;k++) {//num of nodes
-								String batch1 = generateBatch("",(float) 0.3, k, 10);
-								comp.init(readGraph("src/graphs/graph"+String.valueOf(k)+".txt"));
-								long res = comp.report(batch1);
-								total += (String.valueOf(k)+" "+String.valueOf(res)+"\n");
-							}
-							writeFile(total,"numofnodes.txt");
-							break;
-						default://close the program
-							flag = false;
-							break;
+							long res = comp.report(generateBatch("",(float) (0.1*i), 5, 20));
+							total += (String.valueOf(i)+" "+String.valueOf(res)+"\n");
+						}
+						writeFile(total,"percent.txt");
+						total = "";
+						System.out.println("Batch");
+						for (int j=1;j<20;j++) {//batch size
+							System.out.print(j+" ");
+							comp.init(readGraph("inputGraph.txt"));
+							long res = comp.report(generateBatch("",(float) 0.3, 5, j));
+							total += (String.valueOf(j)+" "+String.valueOf(res)+"\n");
+						}
+						writeFile(total,"batchsize.txt");
+						total = "";
+						System.out.println("Numofnodes");
+						for (int k=2;k<15;k++) {//num of nodes
+							System.out.println(k+" ");
+							String batch1 = generateBatch("",(float) 0.3, k, 10);
+							comp.init(readGraph("graphs/graph"+String.valueOf(k)+".txt"));
+							long res = comp.report(batch1);
+							total += (String.valueOf(k)+" "+String.valueOf(res)+"\n");
+						}
+						writeFile(total,"numofnodes.txt");
+						break;
+					default://close the program
+						flag = false;
+						break;
 					}
 
 		            //System.out.print("\033[H\033[2J");
