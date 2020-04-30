@@ -1,6 +1,6 @@
 # RMI_Graph
 
-How to run Ya awlad ?
+How to run:
 1) compile java files
 Command>> javac -cp jgrapht.jar:jheaps.jar *.java
 2) run the RMIC tools
